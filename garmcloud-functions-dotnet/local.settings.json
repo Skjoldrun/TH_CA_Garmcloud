@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "StorageConnectionString": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "HttpFitConverterUrl": "http://localhost:7071/api/HttpFitConverter",
+    "HttpGpxConverterUrl": "http://localhost:7071/api/HttpGpxConverter",
+    "HttpGarmDataUrl": "http://localhost:7071/api/HttpGarmData"
+  }
+}

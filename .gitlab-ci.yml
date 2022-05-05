@@ -1,0 +1,50 @@
+stages:
+  - deploy_dotnet
+  - deploy_python
+
+deploy_dotnet:
+  stage: deploy_dotnet
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1
+  only:
+    - master
+  script:
+    # azure cli tools
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    # azure function core tools
+    - curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+    - mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+    - sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-buster-prod buster main" > /etc/apt/sources.list.d/dotnetdev.list'
+    - sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/debian/10/prod buster main" > /etc/apt/sources.list.d/dotnetdev.list'
+    - apt-get update && apt-get install azure-functions-core-tools
+
+    # azure login and deploy
+    - cd garmcloud-functions-dotnet/
+    - az login --service-principal -u $AZ_SERVICE_PRINCIPAL_URL -p $AZ_SERVICE_PRINCIPAL_SECRET --tenant $AZ_SERVICE_PRINCIPAL_TENANT
+    - func azure functionapp publish garmcloud-functions-dotnet
+    # azure force set remote settings
+    - az functionapp config appsettings set --name garmcloud-functions-dotnet --resource-group sINFdahall-garmcloud --settings HttpGpxConverterUrl=https://garmcloud-functions-dotnet.azurewebsites.net/api/HttpGpxConverter
+    - az functionapp config appsettings set --name garmcloud-functions-dotnet --resource-group sINFdahall-garmcloud --settings HttpFitConverterUrl=https://garmcloud-functions-python.azurewebsites.net/api/HttpFitConverter
+    - az functionapp config appsettings set --name garmcloud-functions-dotnet --resource-group sINFdahall-garmcloud --settings HttpGarmDataUrl=https://garmcloud-functions-dotnet.azurewebsites.net/api/HttpGarmData
+
+
+deploy_python:
+  stage: deploy_python
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1
+  only:
+    - master
+  script:
+    # azure cli tools
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    # azure function core tools
+    - curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+    - mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+    - sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-buster-prod buster main" > /etc/apt/sources.list.d/dotnetdev.list'
+    - sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/debian/10/prod buster main" > /etc/apt/sources.list.d/dotnetdev.list'
+    - apt-get update && apt-get install azure-functions-core-tools
+
+    # azure login and deploy
+    - cd garmcloud-functions-python/
+    - az login --service-principal -u $AZ_SERVICE_PRINCIPAL_URL -p $AZ_SERVICE_PRINCIPAL_SECRET --tenant $AZ_SERVICE_PRINCIPAL_TENANT
+    - func azure functionapp publish garmcloud-functions-python
+    # azure force set remote settings
+    - az functionapp config appsettings set --name garmcloud-functions-python --resource-group sINFdahall-garmcloud --settings HttpGarmDataUrl=https://garmcloud-functions-dotnet.azurewebsites.net/api/HttpGarmData 
