@@ -150,12 +150,12 @@ Converts GPX files to JSON.
 * [Azure CLI Tools](https://docs.microsoft.com/de-de/cli/azure/install-azure-cli-linux?view=azure-cli-latest) - Azure tools 
 
 
-# Geräte
+# Devices
 
 ![Garmin Forerunner 210](./resources/images/Garmin_Forerunner.jpg)  
 [Garmin Forerunner 210](https://buy.garmin.com/de-DE/DE/p/83280)
 
-# Autor
+# Author
 
 [David T. Halletz](https://github.com/Tristus-DH) - **David T. Halletz**
 
