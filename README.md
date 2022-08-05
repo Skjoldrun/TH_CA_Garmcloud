@@ -157,7 +157,7 @@ Converts GPX files to JSON.
 
 # Author
 
-[David T. Halletz](https://github.com/Tristus-DH) - **David T. Halletz**
+David T. Halletz - [Skjoldrun](https://github.com/Skjoldrun)
 
 
 # Demo
